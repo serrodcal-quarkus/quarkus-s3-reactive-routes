@@ -1,8 +1,37 @@
 # reactive-routes-multipart project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, the Supersonic Subatomic Java Framework, to upload, download and list files in a S3 Bucket but using Reactive Routes instead of RestEasy.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+
+## AWS Command line interface
+
+Go to [Installing AWS Cli on macOS](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html#cliv2-mac-install-cmd):
+```shell script
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
+```
+
+## Provision S3 locally
+
+The easiest way to start working with S3 is to run a local instance as a container.
+```shell script
+docker run -it --publish 4566:4566 -e SERVICES=s3 -e START_WEB=0 localstack/localstack:0.12.7
+```
+
+Create an AWS profile for your local instance using AWS CLI:
+```shell script
+$ aws configure --profile localstack
+AWS Access Key ID [None]: test-key
+AWS Secret Access Key [None]: test-secret
+Default region name [None]: us-east-1
+Default output format [None]:
+```
+
+Create a S3 bucket using AWS CLI
+```shell script
+aws s3 mb s3://quarkus.s3.quickstart --profile localstack --endpoint-url=http://localhost:4566
+```
 
 ## Running the application in dev mode
 
@@ -29,6 +58,13 @@ If you want to build an _über-jar_, execute the following command:
 
 The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
+### docker-compose
+
+Run the application and the S3 local bucket using docker-compose:
+```shell script
+docker-compose up
+```
+
 ## Creating a native executable
 
 You can create a native executable using: 
@@ -45,14 +81,8 @@ You can then execute your native executable with: `./target/reactive-routes-mult
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
 
-## Related guides
+## Frontend
 
-- Reactive Routes ([guide](https://quarkus.io/guides/reactive-routes)): REST framework offering the route model to define non blocking endpoints
+Open a browser to [http://localhost:8080/s3.html](http://localhost:8080/s3.html).
 
-## Provided examples
-
-### RESTEasy JAX-RS example
-
-REST is easy peasy with this Hello World RESTEasy resource.
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+Upload new file to the current S3 bucket via the form and see the list of files in the bucket.
