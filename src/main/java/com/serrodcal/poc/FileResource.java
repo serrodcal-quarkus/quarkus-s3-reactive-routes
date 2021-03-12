@@ -1,7 +1,6 @@
 package com.serrodcal.poc;
 
 import io.quarkus.vertx.web.Param;
-import io.smallrye.mutiny.subscription.Cancellable;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import org.jboss.logging.Logger;
@@ -19,6 +18,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.*;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+@Singleton
 public class FileResource {
 
     private final static String TEMP_DIR = System.getProperty("java.io.tmpdir");
